@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.chat {
+    height: calc(80vh - 100px - 30px);
+}
+
+.flex-1 {
+flex: 1 1 0%;
+display: flex;
+flex-flow: column-reverse;
+}
+
+input[type="text"],
+textarea {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+textarea:focus {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}

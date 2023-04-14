@@ -9,8 +9,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.0.2",
     "next": "^13.2.4",
     "react": "18.2.0",
+    "react-avatar": "^5.0.3",
     "react-dom": "18.2.0",
     "zod": "^3.21.4"
   },
