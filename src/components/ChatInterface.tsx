@@ -1,5 +1,43 @@
 const fetchChatCompletion = async (input: string) => {
-  ...
+  try {
+    const response = await fetch(`${SERVER_ADDRESS}/game`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user: input }),
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      console.error('Error response:', errorResponse);
+      throw new Error(`Received ${response.status} ${response.statusText} from server.`);
+    }
+
+    const data = await response.json();
+    // Extract the list of messages from the response data
+    const receivedMessages = data.messages;
+
+    console.log('Success:', data);
+    setMessages((prevMessages) => [
+      ...prevMessages.slice(0, -1), // Remove the 'thinking...' message
+      ...receivedMessages.map((message: ChatMessage) => ({
+        type: message.type, // Use the type from the message
+        content: message.content, // Use the content from the message
+        characterName: message.characterName, // Optional: Use the characterName if available
+        characterRole: message.characterRole, // Optional: Use the characterRole if available
+      })),
+    ]);
+  } catch (error) {
+    console.error('Error:', error);
+    setMessages((prevMessages) => [
+      ...prevMessages.slice(0, -1), // Remove the 'thinking...' message
+      {
+        type: 'system', // Use the type from the response data
+        content: "My apologies, adventurer! I'm experiencing some technical difficulties. Let's try that once more.", // Use the content from the response data
+      },
+    ]);
+  }
 };
 fetchChatCompletion(sanitizedInput);
 

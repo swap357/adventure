@@ -22,24 +22,34 @@ const ChatMessage: React.FC<Props> = ({ message }) => {
   let messageBgColor = '';
   let messageTextColor = '';
 
-  // Set values based on message type
-  if (type === 'user') {
-    avatarName = 'User';
-    avatarColor = tailwindConfig.theme.extend.colors.secondary[900];
-    messageBgColor = tailwindConfig.theme.extend.colors.secondary[600];
-    messageTextColor = '#ECEFF4';
-  } else if (type === 'bot' || type === 'system') {
-    avatarName = 'Bot';
-    avatarColor = tailwindConfig.theme.extend.colors.primary[600];
-    messageBgColor = tailwindConfig.theme.extend.colors.purple[400];
-    messageTextColor = '#ECEFF4';
-  } else if (type === 'character') {
-    avatarName = characterName || '';
-    avatarColor = tailwindConfig.theme.extend.colors.slated[900];
-    messageBgColor = tailwindConfig.theme.extend.colors.slated[800];
-    messageTextColor = '#ECEFF4';
-    // Customize avatarColor, messageBgColor, and messageTextColor for character messages
-  }
+  const messageConfig = {
+    user: {
+      avatarName: 'User',
+      avatarColor: tailwindConfig.theme.extend.colors.secondary[900],
+      messageBgColor: tailwindConfig.theme.extend.colors.secondary[600],
+      messageTextColor: '#ECEFF4',
+    },
+    bot: {
+      avatarName: 'Bot',
+      avatarColor: tailwindConfig.theme.extend.colors.primary[600],
+      messageBgColor: tailwindConfig.theme.extend.colors.purple[400],
+      messageTextColor: '#ECEFF4',
+    },
+    system: {
+      avatarName: 'Bot',
+      avatarColor: tailwindConfig.theme.extend.colors.primary[600],
+      messageBgColor: tailwindConfig.theme.extend.colors.purple[400],
+      messageTextColor: '#ECEFF4',
+    },
+    character: {
+      avatarName: characterName || '',
+      avatarColor: tailwindConfig.theme.extend.colors.slated[900],
+      messageBgColor: tailwindConfig.theme.extend.colors.slated[800],
+      messageTextColor: '#ECEFF4',
+    },
+  };
+
+  const { avatarName, avatarColor, messageBgColor, messageTextColor } = messageConfig[type];
 
   return (
     <div
@@ -47,20 +57,8 @@ const ChatMessage: React.FC<Props> = ({ message }) => {
         isUserMessage ?  'flex-row' : 'flex-row-reverse'
       }`}
     >
-      <div className={`${isUserMessage ? 'mr-2' : 'ml-2'}`}>
-        <Avatar name={avatarName} size={'40'} round={false} color={avatarColor}/>
-      </div>
-      <div
-        className={`p-2 rounded-lg max-w-full break-all bg-opacity-90 ${
-          isUserMessage ? `${messageBgColor}` : ` ${messageBgColor}`
-        }`}
-        style={{ backgroundColor: messageBgColor, color: messageTextColor }}
-      >
-        {type === 'character' && characterRole && (
-          <div className="characterRole">{characterRole}</div>
-        )}
-        {message.content}
-      </div>
+      <AvatarComponent isUserMessage={isUserMessage} avatarName={avatarName} avatarColor={avatarColor} />
+      <MessageComponent isUserMessage={isUserMessage} messageBgColor={messageBgColor} messageTextColor={messageTextColor} type={type} characterRole={characterRole} content={message.content} />
     </div>
   );
 };
