@@ -1,15 +1,7 @@
-// src/components/ChatInterface.tsx
-
-import React, { useState , useEffect} from 'react';
-import ChatMessage from './ChatMessage';
-import { SERVER_ADDRESS } from '../types/constants';
-
-interface ChatMessage {
-    type: 'user' | 'bot' | 'character' | 'system';
-    content: string;
-    characterName?: string;
-    characterRole?: string;
-}
+const fetchChatCompletion = async (input: string) => {
+  ...
+};
+fetchChatCompletion(sanitizedInput);
 
 interface ChatInterfaceProps {
 }
@@ -33,35 +25,23 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ }) => {
 
     // const sessionId = getSessionId();
 
+    const sanitizeInput = (input: string) => {
+      // Add logic to sanitize user input here
+      return input;
+    };
+    
     const handleSendMessage = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (inputValue.trim() === '') return;
-        setMessages([...messages, { type: 'user', content: inputValue }]);
-        setInputValue('');
-        setTimeout(() => {
-            setMessages((prevMessages) => [
-                ...prevMessages,
-                // { type: 'user', content: inputValue },
-                { type: 'bot', content: '...' },
-              ]);
-        }, 1000);
-
-        async function fetchChatCompletion() {
-          
-          try {
-            const response = await fetch(`${SERVER_ADDRESS}/game`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({user:inputValue}),
-            });
-        
-            if (!response.ok) {
-              const errorResponse = await response.json();
-              console.error('Error response:', errorResponse);
-              throw new Error(`Received ${response.status} ${response.statusText} from server.`);
-            }
+      e.preventDefault();
+      const sanitizedInput = sanitizeInput(inputValue);
+      if (sanitizedInput.trim() === '') return;
+      setMessages([...messages, { type: 'user', content: sanitizedInput }]);
+      setInputValue('');
+      fetchChatCompletion(sanitizedInput);
+    };
+    
+    const fetchChatCompletion = async (input: string) => {
+      ...
+    };
         
             const data = await response.json();
             // Extract the list of messages from the response data
